@@ -169,6 +169,8 @@ using Sundials
         react = Reactor(domain, y0, (0.0, 150.11094); p=p) #Create the reactor object
         sol = solve(react.ode, CVODE_BDF(), abstol=1e-20, reltol=1e-12) #solve the ode associated with the reactor
         sim = Simulation(sol, domain)
+        save(sim, "test.csv")
+        @test isfile("test.csv")
 
         spcnames = getfield.(ig.species, :name)
         h2ind = findfirst(isequal("H2"), spcnames)
@@ -524,7 +526,8 @@ using Sundials
         sol = solve(react.ode, CVODE_BDF(), abstol=1e-20, reltol=1e-6)
 
         ssys = SystemSimulation(sol, (domaingas, domaincat,), (inter,), p)
-    
+        save(ssys, "testmult.csv")
+        @test isfile("testmult.csv")
 
         @test concentrations(ssys, "OX", 0.5e-5) ≈ 8.033191655902819e-6 rtol = 1e-5
         @test molefractions(ssys.sims[1], "H2O", 0.5e-5) ≈ 0.10899527627867926 rtol = 1e-5
