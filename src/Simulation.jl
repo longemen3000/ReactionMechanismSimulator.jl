@@ -780,7 +780,7 @@ end
 function save(syss::T, save_name::String) where {T<:SystemSimulation}
     df = DataFrame(syss.sol)
     for sim in syss.sims
-        rename!(df, names(df)[sim.domain.indexes[1]:sim.domain.indexes[2]] .=> sim.names)
+        rename!(df, names(df)[sim.domain.indexes[1]:sim.domain.indexes[2]] .=> sim.names .* "($(sim.domain.phase.name))")
         for (thermovariable, index) in sim.domain.thermovariabledict
             rename!(df, names(df)[index] => thermovariable)
         end
